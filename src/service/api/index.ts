@@ -4,11 +4,15 @@
 // API 唯一标识：
 import * as fileController from './fileController'
 import * as mainController from './mainController'
+import * as orderController from './orderController'
+import * as roomController from './roomController'
 import * as roomTypeController from './roomTypeController'
 import * as userController from './userController'
 export default {
   fileController,
   mainController,
+  orderController,
+  roomController,
   roomTypeController,
   userController,
 }

@@ -54,6 +54,14 @@ const router = createRouter({
         pageType: 'menu'
       },
       component: () => import('../pages/room/RoomTypePage.vue'),
+    },{
+      path: '/room/roomManage',
+      name: '房间管理',
+      meta:{
+        access: ACCESS_ENUM.ADMIN,
+        pageType: 'menu'
+      },
+      component: () => import('../pages/room/RoomPage.vue'),
     }
 
 
