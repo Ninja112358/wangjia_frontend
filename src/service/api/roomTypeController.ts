@@ -32,6 +32,14 @@ export async function deleteRoomTypeUsingPost(
   })
 }
 
+/** listRoomType POST /api/room_type/list */
+export async function listRoomTypeUsingPost(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListRoomType_>('/api/room_type/list', {
+    method: 'POST',
+    ...(options || {}),
+  })
+}
+
 /** listRoomTypeByPage POST /api/room_type/list/page */
 export async function listRoomTypeByPageUsingPost(
   body: API.RoomTypeQueryRequest,

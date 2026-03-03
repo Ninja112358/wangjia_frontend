@@ -71,6 +71,10 @@
       icon: () => h(HomeOutlined),
       label: '主页',
       title: '主页'
+    },{
+      key: '/room/roomManage',
+      label: '房间管理',
+      title: '房间管理'
     },
     {
       key: '/room/roomTypeManage',

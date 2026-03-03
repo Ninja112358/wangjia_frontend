@@ -5,6 +5,18 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListRoom_ = {
+    code?: number
+    data?: Room[]
+    message?: string
+  }
+
+  type BaseResponseListRoomType_ = {
+    code?: number
+    data?: RoomType[]
+    message?: string
+  }
+
   type BaseResponseLoginUserVO_ = {
     code?: number
     data?: LoginUserVO
@@ -14,6 +26,12 @@ declare namespace API {
   type BaseResponseLong_ = {
     code?: number
     data?: number
+    message?: string
+  }
+
+  type BaseResponsePageRoom_ = {
+    code?: number
+    data?: PageRoom_
     message?: string
   }
 
@@ -78,6 +96,27 @@ declare namespace API {
     userRole?: string
   }
 
+  type OrderCheckInRequest = {
+    cardType?: string
+    customType?: number
+    idCard?: string
+    name?: string
+    orderInfo?: string
+    pay?: number
+    phone?: string
+    roomId?: string
+    roomPrice?: number
+    roomType?: string
+  }
+
+  type PageRoom_ = {
+    current?: number
+    pages?: number
+    records?: Room[]
+    size?: number
+    total?: number
+  }
+
   type PageRoomType_ = {
     current?: number
     pages?: number
@@ -92,6 +131,48 @@ declare namespace API {
     records?: UserVO[]
     size?: number
     total?: number
+  }
+
+  type Room = {
+    createTime?: string
+    id?: number
+    isContact?: boolean
+    isDelete?: number
+    isTeam?: boolean
+    isWindow?: string
+    orderId?: number
+    roomCustom?: string
+    roomFloor?: number
+    roomId?: string
+    roomInfo?: string
+    roomPeopleNum?: number
+    roomPrice?: number
+    roomState?: number
+    roomType?: string
+    updateTime?: string
+  }
+
+  type RoomAddRequest = {
+    isWindow?: string
+    roomFloor?: number
+    roomId?: string
+    roomInfo?: string
+    roomPeopleNum?: number
+    roomPrice?: number
+    roomType?: string
+  }
+
+  type RoomQueryRequest = {
+    current?: number
+    id?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+  }
+
+  type RoomSetStateRequest = {
+    id?: number
+    roomState?: number
   }
 
   type RoomType = {
@@ -123,6 +204,17 @@ declare namespace API {
     name?: string
     peopleNum?: number
     price?: number
+  }
+
+  type RoomUpdateRequest = {
+    id?: number
+    isWindow?: string
+    roomFloor?: number
+    roomId?: string
+    roomInfo?: string
+    roomPeopleNum?: number
+    roomPrice?: number
+    roomType?: string
   }
 
   type User = {
@@ -172,6 +264,7 @@ declare namespace API {
 
   type UserUpdateRequest = {
     id?: number
+    userAccount?: string
     userAvatar?: string
     userName?: string
     userProfile?: string
