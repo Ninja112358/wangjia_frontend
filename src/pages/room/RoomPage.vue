@@ -1,5 +1,5 @@
 <template>
-  <div id="roomTypePage">
+  <div id="roomPage">
     <!-- 表单 -->
     <a-form layout="inline" :model="addParams" @finish="doInsert" style="margin-bottom: 16px">
       <a-form-item label="房间号">
@@ -283,7 +283,7 @@ const doEditSave = async (id: string) => {
 const doEditCancel = (id: string) => {
   delete editableData[id];
 };
-const doDelete = async (id: string) => {
+const doDelete = async (id: number) => {
   if(!id){
     message.error("删除失败:id不存在");
     return;
@@ -341,7 +341,7 @@ const doRoomIdInput = () => {
 </script>
 
 <style scoped>
-#roomTypePage{
+#roomPage{
 
 }
 .editable-row-operations button {

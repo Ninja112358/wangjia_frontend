@@ -2,7 +2,7 @@
   <div id="content-layout">
     <a-layout style="min-height: 100vh">
       <a-layout-content class="content">
-        <router-view>页面丢失了哦</router-view>
+        <router-view></router-view>
       </a-layout-content>
     </a-layout>
   </div>

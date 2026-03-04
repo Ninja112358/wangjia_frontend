@@ -62,6 +62,10 @@ const router = createRouter({
         pageType: 'menu'
       },
       component: () => import('../pages/room/RoomPage.vue'),
+    },{
+      path: '/noAuth',
+      name: '无权限页面',
+      component: () => import('../pages/error/NoAuthPage.vue'),
     }
 
 

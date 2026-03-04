@@ -104,9 +104,7 @@ declare namespace API {
     orderInfo?: string
     pay?: number
     phone?: string
-    roomId?: string
-    roomPrice?: number
-    roomType?: string
+    roomList?: RoomCheckInRequest[]
   }
 
   type PageRoom_ = {
@@ -158,6 +156,12 @@ declare namespace API {
     roomId?: string
     roomInfo?: string
     roomPeopleNum?: number
+    roomPrice?: number
+    roomType?: string
+  }
+
+  type RoomCheckInRequest = {
+    roomId?: string
     roomPrice?: number
     roomType?: string
   }
