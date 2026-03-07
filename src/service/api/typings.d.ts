@@ -5,6 +5,18 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListMoneyInfo_ = {
+    code?: number
+    data?: MoneyInfo[]
+    message?: string
+  }
+
+  type BaseResponseListOrder_ = {
+    code?: number
+    data?: Order[]
+    message?: string
+  }
+
   type BaseResponseListRoom_ = {
     code?: number
     data?: Room[]
@@ -65,6 +77,11 @@ declare namespace API {
     message?: string
   }
 
+  type checkoutUsingPOSTParams = {
+    /** orderId */
+    orderId?: number
+  }
+
   type DeleteRequest = {
     id?: number
   }
@@ -84,6 +101,21 @@ declare namespace API {
     id?: number
   }
 
+  type listGroupMoneyInfoByOrderIdUsingPOSTParams = {
+    /** orderId */
+    orderId?: number
+  }
+
+  type listMoneyInfoByOrderIdUsingPOSTParams = {
+    /** orderId */
+    orderId?: number
+  }
+
+  type listOrderGroupDataUsingPOSTParams = {
+    /** orderId */
+    orderId?: number
+  }
+
   type LoginUserVO = {
     createTime?: string
     editTime?: string
@@ -94,6 +126,63 @@ declare namespace API {
     userName?: string
     userProfile?: string
     userRole?: string
+  }
+
+  type MoneyInfo = {
+    createTime?: string
+    id?: number
+    isDelete?: number
+    money?: number
+    moneyType?: string
+    operator?: string
+    orderId?: number
+    payInfo?: string
+    payTime?: string
+    roomId?: string
+    updateTime?: string
+  }
+
+  type MoneyInfoFeeRequest = {
+    money?: number
+    orderId?: number
+    payInfo?: string
+    payTime?: string
+  }
+
+  type Order = {
+    cardType?: string
+    consume?: number
+    createTime?: string
+    customType?: number
+    endTime?: string
+    id?: number
+    idCard?: string
+    isDelete?: number
+    name?: string
+    orderGroupId?: number
+    orderInfo?: string
+    orderState?: number
+    pay?: number
+    phone?: string
+    restMoney?: number
+    roomId?: string
+    roomPrice?: number
+    roomType?: string
+    startTime?: string
+    updateTime?: string
+  }
+
+  type OrderChangeRoomPriceRequest = {
+    orderId?: number
+    payInfo?: string
+    roomPrice?: number
+  }
+
+  type OrderChangeRoomRequest = {
+    orderId?: number
+    payInfo?: string
+    roomId?: string
+    roomPrice?: number
   }
 
   type OrderCheckInRequest = {
@@ -162,6 +251,7 @@ declare namespace API {
 
   type RoomCheckInRequest = {
     roomId?: string
+    roomPeopleNum?: string
     roomPrice?: number
     roomType?: string
   }

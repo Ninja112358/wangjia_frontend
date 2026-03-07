@@ -3,6 +3,7 @@ import HomePage from '@/pages/HomePage.vue'
 import ACCESS_ENUM from '@/access/accessEnum.ts'
 import { HomeOutlined } from '@ant-design/icons-vue'
 import { h } from 'vue'
+import FingerPrintPage from '@/pages/fingerprint/FingerPrintPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,6 +67,19 @@ const router = createRouter({
       path: '/noAuth',
       name: '无权限页面',
       component: () => import('../pages/error/NoAuthPage.vue'),
+    }
+    ,{
+      path: '/notFound',
+      name: '无权限页面',
+      component: () => import('../pages/error/NotFoundPage.vue'),
+    },{
+      path: '/test',
+      name: 'test',
+      component: () => import('../pages/Test.vue'),
+    },{
+      path: '/fingerprint',
+      name: 'fingerprint',
+      component: FingerPrintPage
     }
 
 

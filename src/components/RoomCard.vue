@@ -14,6 +14,7 @@
         <a-space wrap v-else-if="room.roomState === 1 || room.roomState === 4">
           <a-button type="primary" @click="doSelectRoom(room)">查看</a-button>
           <a-button type="primary" @click="setRoomState(room,room.roomState === 1 ? 4 : 1)">{{room.roomState === 1 ? '置脏' : '置净'}}</a-button>
+          <a-button type="primary" @click="doContactRoom(room)">联房</a-button>
         </a-space>
         <!--维修-->
         <a-space wrap v-else-if="room.roomState === 2">
@@ -71,6 +72,7 @@
     </a-popover>
     <SelectRoomModal v-model:open="selectRoomModalOpen" :room="room"></SelectRoomModal>
     <CheckInModal v-model:open="checkInModalOpen" :room="room"></CheckInModal>
+    <ContactRoomModal v-model:open="contactRoomModalOpen" :room="room"></ContactRoomModal>
   </div>
 </template>
 
@@ -79,11 +81,13 @@ import { message, Modal } from 'ant-design-vue'
 import { createVNode, ref } from 'vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { setRoomStateUsingPost } from '@/service/api/roomController.ts'
-import CheckInModal from '@/components/Modal/CheckInModal.vue'
-import SelectRoomModal from '@/components/Modal/SelectRoomModal.vue'
+import CheckInModal from '@/components/modal/CheckInModal.vue'
+import SelectRoomModal from '@/components/modal/SelectRoomModal.vue'
+import ContactRoomModal from '@/components/modal/ContactRoomModal.vue'
 
 const checkInModalOpen = ref<boolean>(false);
 const selectRoomModalOpen = ref<boolean>(false);
+const contactRoomModalOpen = ref<boolean>(false);
 
 defineProps<{
   room: API.Room
@@ -139,10 +143,19 @@ const setRoomState = async (room: API.Room,roomState: number) => {
 
 //入住按钮的监听事件
 const doCheckIn = async (room: API.Room) => {
+  if(room.roomState !== 0){
+    message.error("该房间不能入住");
+    return;
+  }
   checkInModalOpen.value = true;
 }
+//查看按钮的监听事件
 const doSelectRoom = async (room: API.Room) => {
   selectRoomModalOpen.value = true;
+}
+//联房按钮的监听事件
+const doContactRoom = async (room: API.Room) => {
+  contactRoomModalOpen.value = true;
 }
 
 

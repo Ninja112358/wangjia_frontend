@@ -1,6 +1,6 @@
 <template>
   <div id="checkInModal">
-    <a-modal v-model:open="checkInModalOpen" title="入住信息登记" @ok="checkInOk" :zIndex="1050" width="70%" style="top: 40px">
+    <a-modal v-model:open="checkInModalOpen" title="入住信息登记" @ok="checkInOk" :zIndex="1050" width="70%" style="top: 40px" destroyOnClose>
       <a-form layout="inline" :model="checkInParams" @finish="doCheckIn">
         <a-form-item class="form-item">
           <a-input v-model:value="checkInParams.name" placeholder="请输入姓名" addon-before="姓名" size="large" allow-clear/>
@@ -9,16 +9,33 @@
           <a-input v-model:value="checkInParams.phone" placeholder="请输入电话" addon-before="电话"  size="large" allow-clear/>
         </a-form-item>
         <a-form-item class="form-item">
-          <a-input v-model:value="checkInParams.cardType" placeholder="请输入证件类型" addon-before="证件类型"  size="large" allow-clear/>
-        </a-form-item>
-        <a-form-item class="form-item">
-          <a-input v-model:value="checkInParams.idCard" placeholder="请输入证件号" addon-before="证件号"  size="large" allow-clear/>
+          <a-input v-model:value="checkInParams.idCard" size="large" placeholder="请输入证件号" allow-clear>
+            <template #addonBefore>
+              <a-select v-model:value="checkInParams.cardType" size="large" style="padding-left: 0;width: 120px">
+                <a-select-option value="身份证">身份证</a-select-option>
+                <a-select-option value="港澳通行证">港澳通行证</a-select-option>
+                <a-select-option value="军官证">军官证</a-select-option>
+                <a-select-option value="护照">护照</a-select-option>
+                <a-select-option value="台湾身份证">台湾身份证</a-select-option>
+                <a-select-option value="其他">其他</a-select-option>
+              </a-select>
+            </template>
+          </a-input>
         </a-form-item>
         <a-form-item class="form-item">
           <a-input v-model:value="checkInParams.orderInfo" placeholder="请输入订单备注" addon-before="订单备注"  size="large" allow-clear/>
         </a-form-item>
         <a-form-item class="form-item">
-          <a-input v-model:value="checkInParams.customType" placeholder="请输入顾客类型" addon-before="顾客类型"  size="large" allow-clear/>
+          <a-select v-model:value="checkInParams.customType" placeholder="请选择顾客类型" size="large" style="padding-left: 0;width:150px" >
+            <a-select-option :value="0">散客</a-select-option>
+            <a-select-option :value="1">团队</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item class="form-item" v-if="checkInParams.customType === 1">
+          <a-select v-model:value="teamType" placeholder="请选择顾客类型" size="large" style="padding-left: 0;width:150px" >
+            <a-select-option :value="0">走人数</a-select-option>
+            <a-select-option :value="1">走价格</a-select-option>
+          </a-select>
         </a-form-item>
       </a-form>
       <h2 style="font-weight: bolder">房间列表：</h2>
@@ -26,7 +43,7 @@
       <a-table :columns="columns" :data-source="roomList" :scroll="{ y: 450 }" :pagination="false" style="margin-bottom: 8px">
         <template #bodyCell="{ column, text , record,index }">
           <template v-if="column.key === 'index'">{{ index + 1 }}</template>
-          <template v-if="['roomPrice', 'roomPeopleNum','roomInfo'].includes(column.dataIndex)">
+          <template v-if="['roomPrice', 'roomPeopleNum'].includes(column.dataIndex)">
             <div>
               <a-input
                 v-if="editableData[record.id]"
@@ -66,16 +83,21 @@ import { checkInUsingPost } from '@/service/api/orderController.ts'
 import { Input, message, Modal } from 'ant-design-vue'
 import { useRoomListStore } from '@/stores/useRoomListStore.ts'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
-import AddRoomModal from '@/components/Modal/AddRoomModal.vue'
+import AddRoomModal from '@/components/modal/AddRoomModal.vue'
 
 const roomListStore = useRoomListStore();
 const roomList = ref<API.Room[]>([]);
 const addRoomModalOpen = ref(false);
+const teamType = ref(0);
 
 const checkInModalOpen = defineModel('open');
 const props = defineProps<{
   room: API.Room
 }>();
+
+const test = () => {
+  console.log(checkInParams.value.customType);
+}
 
 const doAddRoomUpdate = (selectedRoomList: API.Room[]) => {
   for (let i = 0; i < selectedRoomList.length; i++){
@@ -145,7 +167,7 @@ const columns = [
     align: 'center',
     width: '110px',
     sorter: {
-      compare: (a:API.Room, b:API.Room) => a.roomPeopleNum??0 - (b.roomPeopleNum??0),
+      compare: (a:API.Room, b:API.Room) => (a.roomPeopleNum??0) - (b.roomPeopleNum??0),
     }
   },{
     title: '房间价格',
@@ -153,7 +175,7 @@ const columns = [
     align: 'center',
     width: '110px',
     sorter: {
-      compare: (a:API.Room, b:API.Room) => a.roomPrice??0 - (b.roomPrice??0),
+      compare: (a:API.Room, b:API.Room) => (a.roomPrice??0) - (b.roomPrice??0),
     }
   },{
     title: '房间备注',
@@ -190,6 +212,8 @@ const doDelete = async (id: number) => {
 
 
 const checkInParams = ref<API.OrderCheckInRequest>({
+  cardType: '身份证',
+  customType: 0,
   pay: 0,
   roomList:[]
 });
@@ -215,7 +239,6 @@ const checkInOk = () => {
     zIndex: 1100,
     onOk() {
       checkInParams.value.pay = Number(inputValue.value);
-      checkInParams.value.roomList = roomList.value;
       doCheckIn();
     },
     onCancel() {
@@ -228,7 +251,13 @@ const checkInOk = () => {
 * */
 // 入住
 const doCheckIn = async () => {
-  console.log(checkInParams.value);
+  if(checkInParams.value.customType === 1 && teamType.value === 0){
+    //把所有的房间价格改为房间人数
+    roomList.value.forEach(item => {
+      item.roomPrice = item.roomPeopleNum;
+    });
+  }
+  checkInParams.value.roomList = roomList.value;
   const res = await checkInUsingPost({ ...checkInParams.value });
   if(res.data.code === 0 && res.data.data){
     message.success("入住成功");
@@ -251,5 +280,19 @@ const doCheckIn = async () => {
 .form-item{
   font-size: 14px;
   margin: 10px;
+}
+
+.custom-select {
+  position: relative;
+}
+.addon-before {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 10px; /* 根据需要调整 */
+  z-index: 1; /* 确保图标在 Select 输入框之上 */
+}
+.ant-select {
+  padding-left: 30px; /* 根据图标宽度调整 */
 }
 </style>
