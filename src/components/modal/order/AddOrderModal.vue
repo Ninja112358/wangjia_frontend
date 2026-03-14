@@ -3,7 +3,7 @@
     <a-modal v-model:open="modalOpen" title="选房" @ok="checkInOk" :zIndex="1150" width="80%" style="top: 20px" destroyOnClose>
       <!-- 选中信息提示 -->
       <div style="margin-bottom: 8px; color: #1890ff;">
-        已选择 {{ selectedRowKeys.length }} 个房间
+        已选择 {{ selectedRowKeys.length }} 个订单组
       </div>
 
       <a-table
@@ -19,7 +19,7 @@
         <template #bodyCell="{ column, record, index }">
           <template v-if="column.key === 'index'">{{ index + 1 }}</template>
           <template v-if="column.dataIndex === 'orderGroupInfo'">{{ findOrderGroupInfoStr(record.orderList) }}</template>
-          <template v-if="column.dataIndex === 'orderNum'">{{ record.orderList.length }}</template>
+          <template v-if="column.dataIndex === 'orderNum'">{{ record.orderList?.length || 0 }}</template>
         </template>
       </a-table>
 
@@ -41,7 +41,10 @@ import { listOrderGroupSelectInfoUsingPost } from '@/service/api/orderGroupContr
 
 const modalOpen = defineModel<boolean>('open');
 const emit = defineEmits(['update']);
+
+// 修复：接收已选中的订单组列表，用于过滤
 const props = defineProps<{
+  selectedOrderGroupList: API.OrderGroupSelectInfoVO[],
   orderId: number | string
 }>();
 
@@ -56,9 +59,14 @@ const selectedRows = computed<API.OrderGroupSelectInfoVO[]>(() => {
 });
 
 const fetchData = async () => {
-  const res = await listOrderGroupSelectInfoUsingPost({ orderId: props.orderId })
+  // 这里需要传递当前房间 orderId 到后端
+  const res = await listOrderGroupSelectInfoUsingPost({orderId:props.orderId})
   if (res.data.code === 0 && res.data.data) {
-    selectOrderGroupList.value = res.data.data;
+    // 过滤掉已选中的订单组
+    selectOrderGroupList.value = res.data.data.filter(item => {
+      const exists = props.selectedOrderGroupList?.find(selected => selected.id === item.id);
+      return !exists;
+    });
   } else {
     message.error("获取订单组信息失败：" + res.data.message);
   }
@@ -75,7 +83,6 @@ const columns = [
     title: '订单组信息',
     dataIndex: 'orderGroupInfo',
     align: 'center',
-    width: '100px'
   },
   {
     title: '订单数量',
@@ -115,7 +122,7 @@ const rowSelection = computed<TableProps['rowSelection']>(() => ({
   },
 }));
 
-// 修复：customRow 参数类型改为 OrderGroupSelectInfoVO，不要修改 rowSelection
+// 自定义行点击事件
 const customRow = (record: API.OrderGroupSelectInfoVO) => ({
   onClick: (event: MouseEvent) => {
     // 如果点击的是复选框区域，不触发行点击逻辑
@@ -131,7 +138,6 @@ const customRow = (record: API.OrderGroupSelectInfoVO) => ({
     } else {
       selectedRowKeys.value = [...selectedRowKeys.value, record.id];
     }
-    // 不需要修改 rowSelection，computed 会自动更新
   },
   style: { cursor: 'pointer' }
 });
@@ -139,7 +145,7 @@ const customRow = (record: API.OrderGroupSelectInfoVO) => ({
 const findOrderGroupInfoStr = (orderList: API.Order[]) => {
   // 根据 orderList 找到 orderGroupInfo 例如：张三 (201,202), 王五 (203), 赵六 (207,208)
   const orderListObj: Record<string, string[]> = {};
-  for (const item of orderList) {
+  for (const item of orderList || []) {
     if (item.name) {
       if (orderListObj[item.name]) {
         orderListObj[item.name].push(item.roomId);

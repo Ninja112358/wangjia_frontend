@@ -22,6 +22,9 @@
         <h2>房费:{{orderInfo.consume}}</h2>
         <h2>房价:{{orderInfo.roomPrice}}</h2>
         <h2>收款合计:{{orderInfo.pay}}</h2>
+
+        <h2 v-if="orderInfo.restMoney >= 0">应退:{{orderInfo.restMoney}}</h2>
+        <h2 v-else>应收:{{-orderInfo.restMoney}}</h2>
       </div>
       <div class="order-content">
         <div class="order-sider">
@@ -50,18 +53,15 @@ import { changeRoomPriceUsingPost,
   changeRoomUsingPost, checkoutUsingPost, listOrderGroupDataUsingPost } from '@/service/api/orderController.ts'
 import { DatePicker, Input, Key, message, Modal } from 'ant-design-vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
-import { setRoomStateUsingPost } from '@/service/api/roomController.ts'
 import { useRoomListStore } from '@/stores/useRoomListStore.ts'
 import { deductUsingPost, listGroupMoneyInfoByOrderIdUsingPost, listMoneyInfoByOrderIdUsingPost,
   payUsingPost
 } from '@/service/api/moneyInfoController.ts'
 import dayjs from 'dayjs'
-import { now } from 'ant-design-vue/es/_util/hooks/_vueuse/is'
-import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 
 const modalOpen = defineModel('open');
 const props = defineProps<{
-  room: API.Room
+  orderId: number | any
 }>();
 const selectedKey = ref<Key | null>(null);
 const roomListStore = useRoomListStore();
@@ -165,7 +165,7 @@ const orderSelect = async (selected:any) => {
   orderInfo.value = selected;
   selectedKey.value = selected.id;
   if(selected.id === '0'){
-    await fetchGroupMoneyInfo(props.room.orderId);
+    await fetchGroupMoneyInfo(props.orderId);
   }else{
     await fetchMoneyInfo(selected.id);
   }
@@ -655,7 +655,10 @@ const doDeduct = () => {
 //退房
 const doCheckOut = () => {
   //您确定要退房,请收款:896, 是否继续?
-  const moneyText = orderGroupInfo.value.totalRest >= 0 ? `退款:${orderGroupInfo.value.totalRest}` : `收款:${-orderGroupInfo.value.totalRest}`;
+  let restMoney = orderInfo.value.restMoney??0;
+  if(String(orderInfo.value.id) === '0')
+    restMoney = orderGroupInfo.value.totalRest??0;
+  const moneyText = restMoney >= 0 ? `退款:${restMoney}` : `收款:${-restMoney}`;
   Modal.confirm({
     title: '提示',
     icon: createVNode(ExclamationCircleOutlined),
@@ -666,11 +669,14 @@ const doCheckOut = () => {
       if(orderId === '0'){
         //这里要把所有订单组的订单全部退房
         for (let i = 0; i < orderList.value.length; i++){
-          const res = await checkoutUsingPost({ orderId: orderList.value[i].id });
-          if(res.data.code === 0){
-            message.success(`房间${orderList.value[i].roomId}退房成功`);
-          }else
-            message.error(`房间${orderList.value[i].roomId}退房失败:${res.data.message}`)
+          if(orderList.value[i].id && String(orderList.value[i].id) !== '0'){
+            console.log(orderList.value[i]);
+            const res = await checkoutUsingPost({ orderId: orderList.value[i].id });
+            if(res.data.code === 0){
+              message.success(`房间${orderList.value[i].roomId}退房成功`);
+            }else
+              message.error(`房间${orderList.value[i].roomId}退房失败:${res.data.message}`)
+          }
         }
         await fetchData();
         await roomListStore.fetchRoomList();
@@ -700,8 +706,8 @@ const doCheckOut = () => {
  * */
 const fetchData = async () => {
   //获取所有订单组的数据
-  //选择的房间的订单id是props.room.orderId,可以根据查到的订单组去定位
-  await fetchOrderGroupData(props.room.orderId);
+  //选择的房间的订单id是props.orderId,可以根据查到的订单组去定位
+  await fetchOrderGroupData(props.orderId);
   //获取右边金额信息的数据
 }
 
@@ -825,7 +831,7 @@ watch(() => modalOpen.value, async (newValue) => {
     selectedKey.value = null;
     await fetchData();
     await nextTick();
-    selectedKey.value = props.room.orderId;
+    selectedKey.value = props.orderId;
   }
 })
 

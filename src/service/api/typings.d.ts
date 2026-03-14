@@ -219,6 +219,11 @@ declare namespace API {
     roomList?: RoomCheckInRequest[]
   }
 
+  type OrderContactRequest = {
+    orderGroupId?: number
+    orderGroupSelectInfoList?: OrderGroupSelectInfoVO[]
+  }
+
   type OrderGroup = {
     createTime?: string
     id?: number

@@ -32,6 +32,21 @@ export async function checkoutUsingPost(
   })
 }
 
+/** contactOrder POST /api/order/contact */
+export async function contactOrderUsingPost(
+  body: API.OrderContactRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/order/contact', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** listOrderGroupData POST /api/order/list/orderGroupData */
 export async function listOrderGroupDataUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

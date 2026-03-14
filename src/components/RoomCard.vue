@@ -70,7 +70,7 @@
         </div>
       </div>
     </a-popover>
-    <SelectRoomModal v-model:open="selectRoomModalOpen" :room="room"></SelectRoomModal>
+    <SelectRoomModal v-model:open="selectRoomModalOpen" :order-id="room.orderId??0"></SelectRoomModal>
     <CheckInModal v-model:open="checkInModalOpen" :room="room"></CheckInModal>
     <ContactRoomModal v-model:open="contactRoomModalOpen" :room="room"></ContactRoomModal>
   </div>

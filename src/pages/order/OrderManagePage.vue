@@ -170,6 +170,7 @@
         </template>
       </template>
     </a-table>
+    <SelectRoomModal v-model:open="selectRoomModalOpen" :order-id="lookOrderId"></SelectRoomModal>
   </div>
 </template>
 <script lang="ts" setup>
@@ -184,8 +185,12 @@ import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import dayjs from 'dayjs'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { deductUsingPost } from '@/service/api/moneyInfoController.ts'
+import SelectRoomModal from '@/components/modal/room/SelectRoomModal.vue'
 
 const loginUserStore = useLoginUserStore();
+
+const selectRoomModalOpen = ref(false);
+const lookOrderId = ref(0);
 
 const columns = [
   {
@@ -419,7 +424,9 @@ const doSettle = async (record: API.Order) => {
   })
 }
 const doLook = (record: API.Order) => {
-  console.log(record)
+  lookOrderId.value = record.id??0;
+  selectRoomModalOpen.value = true;
+  console.log(record.id);
 }
 
 // 金额格式化

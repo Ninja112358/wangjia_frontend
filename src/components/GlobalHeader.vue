@@ -21,7 +21,7 @@
         <div class="user-login-status">
           <div v-if="loginUserStore.loginUser.id">
             <a-dropdown>
-              <ASpace @click="doUserCenter" style="cursor: pointer">
+              <ASpace @click="doHome" style="cursor: pointer">
                 <a-avatar :src="loginUserStore.loginUser.userAvatar" />
                 <div class="user-name">{{ loginUserStore.loginUser.userName ?? '无名' }}</div>
               </ASpace>
@@ -136,6 +136,10 @@
   // 用户中心
   const doUserCenter = () => {
     router.push('/user/userCenter')
+  }
+  // 主页
+  const doHome = () => {
+    router.push('/')
   }
   // 用户注销
   const doLogout = async () => {
