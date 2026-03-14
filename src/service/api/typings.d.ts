@@ -17,6 +17,18 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListOrderGroup_ = {
+    code?: number
+    data?: OrderGroup[]
+    message?: string
+  }
+
+  type BaseResponseListOrderGroupSelectInfoVO_ = {
+    code?: number
+    data?: OrderGroupSelectInfoVO[]
+    message?: string
+  }
+
   type BaseResponseListRoom_ = {
     code?: number
     data?: Room[]
@@ -38,6 +50,12 @@ declare namespace API {
   type BaseResponseLong_ = {
     code?: number
     data?: number
+    message?: string
+  }
+
+  type BaseResponsePageOrder_ = {
+    code?: number
+    data?: PageOrder_
     message?: string
   }
 
@@ -112,6 +130,11 @@ declare namespace API {
   }
 
   type listOrderGroupDataUsingPOSTParams = {
+    /** orderId */
+    orderId?: number
+  }
+
+  type listOrderGroupSelectInfoUsingPOSTParams = {
     /** orderId */
     orderId?: number
   }
@@ -194,6 +217,73 @@ declare namespace API {
     pay?: number
     phone?: string
     roomList?: RoomCheckInRequest[]
+  }
+
+  type OrderGroup = {
+    createTime?: string
+    id?: number
+    isDelete?: number
+    state?: number
+    updateTime?: string
+  }
+
+  type OrderGroupSelectInfoVO = {
+    id?: number
+    orderList?: Order[]
+  }
+
+  type OrderQueryRequest = {
+    cardType?: string
+    consume?: number
+    createTime?: string
+    current?: number
+    customType?: number
+    endTime?: string
+    id?: number
+    idCard?: string
+    name?: string
+    orderGroupId?: number
+    orderInfo?: string
+    orderState?: number
+    pageSize?: number
+    pay?: number
+    phone?: string
+    restMoney?: number
+    roomId?: string
+    roomPrice?: number
+    roomType?: string
+    shopConsume?: number
+    sortField?: string
+    sortOrder?: string
+    startTime?: string
+    updateTime?: string
+  }
+
+  type OrderUpdateRequest = {
+    cardType?: string
+    consume?: number
+    customType?: number
+    id?: number
+    idCard?: string
+    name?: string
+    orderGroupId?: number
+    orderInfo?: string
+    orderState?: number
+    pay?: number
+    phone?: string
+    restMoney?: number
+    roomId?: string
+    roomPrice?: number
+    roomType?: string
+    shopConsume?: number
+  }
+
+  type PageOrder_ = {
+    current?: number
+    pages?: number
+    records?: Order[]
+    size?: number
+    total?: number
   }
 
   type PageRoom_ = {

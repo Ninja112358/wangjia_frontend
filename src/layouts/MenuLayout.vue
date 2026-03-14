@@ -25,6 +25,7 @@
 }
 #menu-layout .content{
   min-width: 860px;
+  max-width: 100%;
   padding: 20px;
   margin: 0 auto 28px;
   border-radius: 12px;

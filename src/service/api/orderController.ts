@@ -47,6 +47,21 @@ export async function listOrderGroupDataUsingPost(
   })
 }
 
+/** listOrderByPage POST /api/order/list/page */
+export async function listOrderByPageUsingPost(
+  body: API.OrderQueryRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePageOrder_>('/api/order/list/page', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** changeRoomPrice POST /api/order/room_price/change */
 export async function changeRoomPriceUsingPost(
   body: API.OrderChangeRoomPriceRequest,
@@ -68,6 +83,21 @@ export async function changeRoomUsingPost(
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseBoolean_>('/api/order/room/change', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** updateOrder POST /api/order/update */
+export async function updateOrderUsingPost(
+  body: API.OrderUpdateRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/order/update', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -83,7 +83,7 @@ import { checkInUsingPost } from '@/service/api/orderController.ts'
 import { Input, message, Modal } from 'ant-design-vue'
 import { useRoomListStore } from '@/stores/useRoomListStore.ts'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
-import AddRoomModal from '@/components/modal/AddRoomModal.vue'
+import AddRoomModal from '@/components/modal/room/AddRoomModal.vue'
 
 const roomListStore = useRoomListStore();
 const roomList = ref<API.Room[]>([]);

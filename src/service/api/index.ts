@@ -6,6 +6,7 @@ import * as fileController from './fileController'
 import * as mainController from './mainController'
 import * as moneyInfoController from './moneyInfoController'
 import * as orderController from './orderController'
+import * as orderGroupController from './orderGroupController'
 import * as roomController from './roomController'
 import * as roomTypeController from './roomTypeController'
 import * as userController from './userController'
@@ -14,6 +15,7 @@ export default {
   mainController,
   moneyInfoController,
   orderController,
+  orderGroupController,
   roomController,
   roomTypeController,
   userController,

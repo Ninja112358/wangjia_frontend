@@ -76,7 +76,7 @@ const doCheckedChange = () => {
 <style>
 #home-page{
   margin: -36px -20px -20px;
-  width: 100vw;
+  width: calc(100vw - 20px);
 }
 #home-page .sider{
   position:fixed;
@@ -89,7 +89,7 @@ const doCheckedChange = () => {
 #home-page .main{
   background: #fff;
   padding: 20px;
-  width: calc(100vw - 250px);
+  width: calc(100% - 250px);
   margin-left: 250px;
 }
 #home-page .footer{

@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { useRoomListStore } from '@/stores/useRoomListStore.ts'
-import { onMounted, reactive, ref, watch, computed, nextTick } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
 import type { Key } from 'ant-design-vue/es/_util/type'
 import type { TableProps } from 'ant-design-vue'
 
@@ -49,15 +49,13 @@ const selectRoomList = ref<API.Room[]>([]);
 // 选中的行 ID 集合
 const selectedRowKeys = ref<Key[]>([])
 
-// 修复：使用函数动态返回 selectedRowKeys，确保全选时同步
-const rowSelection = reactive<TableProps['rowSelection']>({
-  get selectedRowKeys() {
-    return selectedRowKeys.value;
-  },
+// 修复：使用 computed 返回 rowSelection，确保响应式更新
+const rowSelection = computed<TableProps['rowSelection']>(() => ({
+  selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: Key[]) => {
     selectedRowKeys.value = keys;
   },
-});
+}));
 
 // 自定义行点击事件
 const customRow = (record: API.Room) => ({
@@ -71,13 +69,10 @@ const customRow = (record: API.Room) => ({
     // 切换选中状态
     const index = selectedRowKeys.value.indexOf(record.id);
     if (index > -1) {
-      selectedRowKeys.value.splice(index, 1);
+      selectedRowKeys.value = selectedRowKeys.value.filter(id => id !== record.id);
     } else {
-      selectedRowKeys.value.push(record.id);
+      selectedRowKeys.value = [...selectedRowKeys.value, record.id];
     }
-
-    // 修复：强制更新 rowSelection，触发视图刷新
-    rowSelection.selectedRowKeys = [...selectedRowKeys.value];
   },
   style: { cursor: 'pointer' }
 })
@@ -93,10 +88,6 @@ watch(() => modalOpen.value, (newValue) => {
     fetchData();
     // 重置选中状态
     selectedRowKeys.value = [];
-    // 修复：重置时也要更新 rowSelection
-    nextTick(() => {
-      rowSelection.selectedRowKeys = [];
-    });
   }
 })
 
@@ -186,7 +177,6 @@ const checkInOk = () => {
   emit('update', selectedRows.value);
   modalOpen.value = false;
 }
-
 </script>
 
 <style scoped>

@@ -81,9 +81,9 @@ import { message, Modal } from 'ant-design-vue'
 import { createVNode, ref } from 'vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { setRoomStateUsingPost } from '@/service/api/roomController.ts'
-import CheckInModal from '@/components/modal/CheckInModal.vue'
-import SelectRoomModal from '@/components/modal/SelectRoomModal.vue'
-import ContactRoomModal from '@/components/modal/ContactRoomModal.vue'
+import CheckInModal from '@/components/modal/room/CheckInModal.vue'
+import SelectRoomModal from '@/components/modal/room/SelectRoomModal.vue'
+import ContactRoomModal from '@/components/modal/room/ContactRoomModal.vue'
 
 const checkInModalOpen = ref<boolean>(false);
 const selectRoomModalOpen = ref<boolean>(false);
