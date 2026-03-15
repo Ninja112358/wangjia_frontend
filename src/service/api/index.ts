@@ -2,6 +2,7 @@
 /* eslint-disable */
 // API 更新时间：
 // API 唯一标识：
+import * as jobController from './jobController'
 import * as fileController from './fileController'
 import * as mainController from './mainController'
 import * as moneyInfoController from './moneyInfoController'
@@ -11,6 +12,7 @@ import * as roomController from './roomController'
 import * as roomTypeController from './roomTypeController'
 import * as userController from './userController'
 export default {
+  jobController,
   fileController,
   mainController,
   moneyInfoController,

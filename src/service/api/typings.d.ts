@@ -100,6 +100,29 @@ declare namespace API {
     orderId?: number
   }
 
+  type CreateCronJobRequest = {
+    cronExpression?: string
+    groupName?: string
+    jobClass?: string
+    jobName?: string
+    params?: Record<string, any>
+  }
+
+  type CreateSimpleJobRequest = {
+    groupName?: string
+    intervalSeconds?: number
+    jobClass?: string
+    jobName?: string
+    repeatCount?: number
+  }
+
+  type deleteJobUsingDELETEParams = {
+    /** groupName */
+    groupName?: string
+    /** jobName */
+    jobName: string
+  }
+
   type DeleteRequest = {
     id?: number
   }
@@ -107,6 +130,13 @@ declare namespace API {
   type downloadFileUsingGETParams = {
     /** filepath */
     filepath?: string
+  }
+
+  type getJobDetailUsingGETParams = {
+    /** groupName */
+    groupName?: string
+    /** jobName */
+    jobName: string
   }
 
   type getUserByIdUsingGETParams = {
@@ -177,6 +207,7 @@ declare namespace API {
     consume?: number
     createTime?: string
     customType?: number
+    deductState?: number
     endTime?: string
     id?: number
     idCard?: string
@@ -315,6 +346,20 @@ declare namespace API {
     total?: number
   }
 
+  type pauseJobUsingPOSTParams = {
+    /** groupName */
+    groupName?: string
+    /** jobName */
+    jobName: string
+  }
+
+  type resumeJobUsingPOSTParams = {
+    /** groupName */
+    groupName?: string
+    /** jobName */
+    jobName: string
+  }
+
   type Room = {
     createTime?: string
     id?: number
@@ -404,6 +449,13 @@ declare namespace API {
     roomPeopleNum?: number
     roomPrice?: number
     roomType?: string
+  }
+
+  type triggerNowUsingPOSTParams = {
+    /** groupName */
+    groupName?: string
+    /** jobName */
+    jobName: string
   }
 
   type User = {

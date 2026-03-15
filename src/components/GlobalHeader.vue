@@ -90,6 +90,10 @@
       label: '用户管理',
       title: '用户管理'
     },{
+      key: '/job/JobManage',
+      label: '定时器管理',
+      title: '定时器管理'
+    },{
       key: '/user/userCenter',
       label: '个人中心',
       title: '个人中心'
