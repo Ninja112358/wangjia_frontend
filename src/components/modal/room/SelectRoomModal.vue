@@ -69,7 +69,12 @@ const roomListStore = useRoomListStore();
 //订单和订单组顶部的展示信息
 const orderGroupInfo = computed(() => {
   return {
-    totalRest: orderList.value.reduce((acc, cur) => acc + (cur.restMoney??0), 0),
+    totalRest: orderList.value.reduce((acc, cur) => {
+      if(cur.orderState == 0)
+        return acc + (cur.restMoney??0);
+      else
+        return acc;
+    }, 0),
     pay: orderList.value.reduce((acc, cur) => acc + (cur.pay??0), 0),
     consume: orderList.value.reduce((acc, cur) => acc + (cur.consume??0), 0),
     roomPrice: orderList.value.reduce((acc, cur) => acc + (cur.roomPrice??0), 0)

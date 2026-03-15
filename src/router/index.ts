@@ -72,6 +72,14 @@ const router = createRouter({
       },
       component: () => import('../pages/order/OrderManagePage.vue'),
     },{
+      path: '/job/jobManage',
+      name: '定时器管理',
+      meta:{
+        access: ACCESS_ENUM.USER,
+        pageType: 'menu'
+      },
+      component: () => import('../pages/job/JobManagePage.vue'),
+    },{
       path: '/noAuth',
       name: '无权限页面',
       component: () => import('../pages/error/NoAuthPage.vue'),
