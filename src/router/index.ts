@@ -64,6 +64,14 @@ const router = createRouter({
       },
       component: () => import('../pages/room/RoomPage.vue'),
     },{
+      path: '/shop/shopManage',
+      name: '商品管理',
+      meta:{
+        access: ACCESS_ENUM.ADMIN,
+        pageType: 'menu'
+      },
+      component: () => import('../pages/shop/ShopManagePage.vue'),
+    },{
       path: '/order/orderManage',
       name: '订单管理',
       meta:{

@@ -41,6 +41,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListShop_ = {
+    code?: number
+    data?: Shop[]
+    message?: string
+  }
+
   type BaseResponseLoginUserVO_ = {
     code?: number
     data?: LoginUserVO
@@ -255,6 +261,7 @@ declare namespace API {
     roomId?: string
     roomPrice?: number
     roomType?: string
+    shopConsume?: number
     startTime?: string
     updateTime?: string
   }
@@ -518,6 +525,11 @@ declare namespace API {
     num?: number
     price?: number
     type?: string
+  }
+
+  type ShopEnterOrderRequest = {
+    orderId?: number
+    shopList?: Shop[]
   }
 
   type ShopQueryRequest = {

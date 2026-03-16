@@ -88,6 +88,10 @@
       key: '/room/roomTypeManage',
       label: '房间类型管理',
       title: '房间类型管理'
+    },{
+      key: '/shop/shopManage',
+      label: '商品管理',
+      title: '商品管理'
     },
     {
       key: '/admin/userManage',

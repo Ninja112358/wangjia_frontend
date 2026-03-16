@@ -15,11 +15,15 @@
 
         <h2>收款合计:{{orderGroupInfo.pay}}</h2>
         <h2>总房费:{{orderGroupInfo.consume}}</h2>
+        <h2>总小吧费:{{orderGroupInfo.shopConsume}}</h2>
+        <h2>总消费:{{orderGroupInfo.shopConsume + orderGroupInfo.consume}}</h2>
         <h2>总房价:{{orderGroupInfo.roomPrice}}</h2>
       </div>
       <div class="order-info" v-if="selectedKey !== '0'">
         <h2>房间号:{{orderInfo.roomId}}</h2>
         <h2>房费:{{orderInfo.consume}}</h2>
+        <h2>小吧费:{{orderInfo.shopConsume}}</h2>
+        <h2>合计消费:{{(orderInfo.shopConsume??0) + (orderInfo.consume??0)}}</h2>
         <h2>房价:{{orderInfo.roomPrice}}</h2>
         <h2>收款合计:{{orderInfo.pay}}</h2>
 
@@ -58,6 +62,12 @@
           </a-table>
         </div>
       </div>
+      <!-- 引入选择器组件 -->
+      <ShopEnterOrderModal
+        v-model:open="shopModalVisible"
+        :orderId="selectedKey"
+        @success="handleShopSuccess"
+      />
     </a-modal>
   </div>
 </template>
@@ -74,6 +84,7 @@ import { deductUsingPost, listGroupMoneyInfoByOrderIdUsingPost, listMoneyInfoByO
   payUsingPost
 } from '@/service/api/moneyInfoController.ts'
 import dayjs from 'dayjs'
+import ShopEnterOrderModal from '@/components/modal/room/ShopEnterOrderModal.vue'
 
 const modalOpen = defineModel('open');
 const props = defineProps<{
@@ -93,7 +104,8 @@ const orderGroupInfo = computed(() => {
     }, 0),
     pay: orderList.value.reduce((acc, cur) => acc + (cur.pay??0), 0),
     consume: orderList.value.reduce((acc, cur) => acc + (cur.consume??0), 0),
-    roomPrice: orderList.value.reduce((acc, cur) => acc + (cur.roomPrice??0), 0)
+    roomPrice: orderList.value.reduce((acc, cur) => acc + (cur.roomPrice??0), 0),
+    shopConsume: orderList.value.reduce((acc, cur) => acc + (cur.shopConsume??0), 0)
   }
 })
 const orderInfo = ref<API.Order>({});
@@ -200,8 +212,20 @@ const orderSelect = async (selected:any) => {
 * 查询窗口顶部的那几个按钮的事件
 * */
 
-const doCheckInShop = () => {
+const shopModalVisible = ref(false);
+const handleShopSuccess = async (data:any) => {
+  await fetchMoneyInfo(selectedKey.value);
+  const temp = selectedKey.value;
+  selectedKey.value = null;
+  await fetchData();
+  await nextTick();
+  selectedKey.value = temp;
+}
 
+
+
+const doCheckInShop = () => {
+  shopModalVisible.value = true;
 }
 
 
@@ -886,6 +910,8 @@ const formatMoney = (value: number | string | undefined | null): string => {
   return Number(value).toFixed(2);
 }
 const getTagColor = (type: string) => {
+  if(type === '小吧入账')
+    return 'cyan';
   return type === '收款' ? 'green' : type === '扣费' ? 'red' : type === '换房' ? 'orange' : type === '改价' ? 'blue' : 'default';
 }
 

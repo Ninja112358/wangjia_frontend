@@ -17,6 +17,21 @@ export async function deductUsingPost(
   })
 }
 
+/** shopEnterOrder POST /api/money_info/deduct/shop */
+export async function shopEnterOrderUsingPost(
+  body: API.ShopEnterOrderRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/money_info/deduct/shop', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** deleteMoneyInfo POST /api/money_info/delete */
 export async function deleteMoneyInfoUsingPost(
   body: API.DeleteRequest,

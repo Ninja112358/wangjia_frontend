@@ -25,6 +25,7 @@
           <a-select-option value="扣费">扣费</a-select-option>
           <a-select-option value="换房">换房</a-select-option>
           <a-select-option value="改价">改价</a-select-option>
+          <a-select-option value="小吧入账">小吧入账</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item style="margin-bottom: 16px">
@@ -48,6 +49,7 @@
                 <a-select-option value="扣费">扣费</a-select-option>
                 <a-select-option value="换房">换房</a-select-option>
                 <a-select-option value="改价">改价</a-select-option>
+                <a-select-option value="小吧入账">小吧入账</a-select-option>
               </a-select>
             </template>
             <template v-else>
@@ -393,9 +395,10 @@ const formatMoney = (value: number | string | undefined | null): string => {
 }
 // 设置标签颜色
 const getTagColor = (type: string) => {
+  if(type === '小吧入账')
+    return 'cyan';
   return type === '收款' ? 'green' : type === '扣费' ? 'red' : type === '换房' ? 'orange' : type === '改价' ? 'blue' : 'default';
 }
-
 </script>
 
 <style scoped>

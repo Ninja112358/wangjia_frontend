@@ -29,8 +29,16 @@ export async function deleteShopUsingPost(
   })
 }
 
-/** listShop POST /api/shop/list/page */
-export async function listShopUsingPost(
+/** listShop POST /api/shop/list */
+export async function listShopUsingPost(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListShop_>('/api/shop/list', {
+    method: 'POST',
+    ...(options || {}),
+  })
+}
+
+/** listShopByPage POST /api/shop/list/page */
+export async function listShopByPageUsingPost(
   body: API.ShopQueryRequest,
   options?: { [key: string]: any }
 ) {
