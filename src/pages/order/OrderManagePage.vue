@@ -426,7 +426,6 @@ const doSettle = async (record: API.Order) => {
 const doLook = (record: API.Order) => {
   lookOrderId.value = record.id??0;
   selectRoomModalOpen.value = true;
-  console.log(record.id);
 }
 
 // 金额格式化

@@ -17,6 +17,21 @@ export async function deductUsingPost(
   })
 }
 
+/** deleteMoneyInfo POST /api/money_info/delete */
+export async function deleteMoneyInfoUsingPost(
+  body: API.DeleteRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/money_info/delete', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** listGroupMoneyInfoByOrderId POST /api/money_info/list/group/orderId */
 export async function listGroupMoneyInfoByOrderIdUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -47,12 +62,42 @@ export async function listMoneyInfoByOrderIdUsingPost(
   })
 }
 
+/** listMoneyInfoByPage POST /api/money_info/list/page */
+export async function listMoneyInfoByPageUsingPost(
+  body: API.MoneyInfoQueryRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePageMoneyInfo_>('/api/money_info/list/page', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** pay POST /api/money_info/pay */
 export async function payUsingPost(
   body: API.MoneyInfoFeeRequest,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseBoolean_>('/api/money_info/pay', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** updateMoneyInfo POST /api/money_info/update */
+export async function updateMoneyInfoUsingPost(
+  body: API.MoneyInfoUpdateRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/money_info/update', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

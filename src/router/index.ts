@@ -72,10 +72,18 @@ const router = createRouter({
       },
       component: () => import('../pages/order/OrderManagePage.vue'),
     },{
+      path: '/money_info/moneyInfoManage',
+      name: '金额信息管理',
+      meta:{
+        access: ACCESS_ENUM.USER,
+        pageType: 'menu'
+      },
+      component: () => import('../pages/money_info/MoneyInfoManagePage.vue'),
+    },{
       path: '/job/jobManage',
       name: '定时器管理',
       meta:{
-        access: ACCESS_ENUM.USER,
+        access: ACCESS_ENUM.ADMIN,
         pageType: 'menu'
       },
       component: () => import('../pages/job/JobManagePage.vue'),

@@ -10,6 +10,7 @@ import * as orderController from './orderController'
 import * as orderGroupController from './orderGroupController'
 import * as roomController from './roomController'
 import * as roomTypeController from './roomTypeController'
+import * as shopController from './shopController'
 import * as userController from './userController'
 export default {
   jobController,
@@ -20,5 +21,6 @@ export default {
   orderGroupController,
   roomController,
   roomTypeController,
+  shopController,
   userController,
 }

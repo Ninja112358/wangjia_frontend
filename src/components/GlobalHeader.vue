@@ -76,6 +76,10 @@
       label: '订单管理',
       title: '订单管理'
     },{
+      key: '/money_info/moneyInfoManage',
+      label: '金额信息管理',
+      title: '金额信息管理'
+    },{
       key: '/room/roomManage',
       label: '房间管理',
       title: '房间管理'
@@ -90,7 +94,7 @@
       label: '用户管理',
       title: '用户管理'
     },{
-      key: '/job/JobManage',
+      key: '/job/jobManage',
       label: '定时器管理',
       title: '定时器管理'
     },{

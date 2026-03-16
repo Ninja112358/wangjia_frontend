@@ -39,7 +39,23 @@
           />
         </div>
         <div class="money-info">
-          <a-table :columns="moneyInfoColumns" :data-source="moneyInfoList" :scroll="{ y: 430 }" :pagination="false"></a-table>
+          <a-table :columns="moneyInfoColumns" :data-source="moneyInfoList" :scroll="{ y: 430 }" :pagination="false">
+            <template #bodyCell="{ column, text, record }">
+              <!-- 营业项目 (收支类型) -->
+              <template v-if="column.dataIndex === 'moneyType'">
+                <a-tag :color=" getTagColor(record.moneyType)">
+                  {{ text || '未知' }}
+                </a-tag>
+              </template>
+
+              <!-- 金额 -->
+              <template v-if="column.dataIndex === 'money'">
+                  <span :style="{ color: record.moneyType === '扣费' ? 'red' : record.moneyType === '收款' ? 'green' : 'black' , fontWeight: 'bold' }">
+                    {{ formatMoney(text) }}
+                  </span>
+              </template>
+            </template>
+          </a-table>
         </div>
       </div>
     </a-modal>
@@ -863,6 +879,16 @@ const formatDate = (date: string | number | Date) => {
 
   return `${year}/${month}/${day} ${hours}:${minutes}`
 }
+
+// 金额格式化
+const formatMoney = (value: number | string | undefined | null): string => {
+  if (value === undefined || value === null || value === '') return '0.00';
+  return Number(value).toFixed(2);
+}
+const getTagColor = (type: string) => {
+  return type === '收款' ? 'green' : type === '扣费' ? 'red' : type === '换房' ? 'orange' : type === '改价' ? 'blue' : 'default';
+}
+
 
 </script>
 

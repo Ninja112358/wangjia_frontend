@@ -53,6 +53,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePageMoneyInfo_ = {
+    code?: number
+    data?: PageMoneyInfo_
+    message?: string
+  }
+
   type BaseResponsePageOrder_ = {
     code?: number
     data?: PageOrder_
@@ -68,6 +74,12 @@ declare namespace API {
   type BaseResponsePageRoomType_ = {
     code?: number
     data?: PageRoomType_
+    message?: string
+  }
+
+  type BaseResponsePageShop_ = {
+    code?: number
+    data?: PageShop_
     message?: string
   }
 
@@ -202,6 +214,27 @@ declare namespace API {
     payTime?: string
   }
 
+  type MoneyInfoQueryRequest = {
+    current?: number
+    id?: number
+    moneyType?: string
+    operator?: string
+    orderId?: number
+    pageSize?: number
+    payInfo?: string
+    roomId?: string
+    sortField?: string
+    sortOrder?: string
+  }
+
+  type MoneyInfoUpdateRequest = {
+    id?: number
+    money?: number
+    moneyType?: string
+    payInfo?: string
+    payTime?: string
+  }
+
   type Order = {
     cardType?: string
     consume?: number
@@ -314,6 +347,14 @@ declare namespace API {
     shopConsume?: number
   }
 
+  type PageMoneyInfo_ = {
+    current?: number
+    pages?: number
+    records?: MoneyInfo[]
+    size?: number
+    total?: number
+  }
+
   type PageOrder_ = {
     current?: number
     pages?: number
@@ -334,6 +375,14 @@ declare namespace API {
     current?: number
     pages?: number
     records?: RoomType[]
+    size?: number
+    total?: number
+  }
+
+  type PageShop_ = {
+    current?: number
+    pages?: number
+    records?: Shop[]
     size?: number
     total?: number
   }
@@ -449,6 +498,48 @@ declare namespace API {
     roomPeopleNum?: number
     roomPrice?: number
     roomType?: string
+  }
+
+  type Shop = {
+    createTime?: string
+    id?: number
+    info?: string
+    isDelete?: number
+    name?: string
+    num?: number
+    price?: number
+    type?: string
+    updateTime?: string
+  }
+
+  type ShopAddRequest = {
+    info?: string
+    name?: string
+    num?: number
+    price?: number
+    type?: string
+  }
+
+  type ShopQueryRequest = {
+    current?: number
+    id?: number
+    info?: string
+    name?: string
+    num?: number
+    pageSize?: number
+    price?: number
+    sortField?: string
+    sortOrder?: string
+    type?: string
+  }
+
+  type ShopUpdateRequest = {
+    id?: number
+    info?: string
+    name?: string
+    num?: number
+    price?: number
+    type?: string
   }
 
   type triggerNowUsingPOSTParams = {
