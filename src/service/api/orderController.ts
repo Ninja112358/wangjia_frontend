@@ -32,6 +32,21 @@ export async function checkoutUsingPost(
   })
 }
 
+/** checkoutCancel POST /api/order/checkout/cancel */
+export async function checkoutCancelUsingPost(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.checkoutCancelUsingPOSTParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/order/checkout/cancel', {
+    method: 'POST',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
 /** contactOrder POST /api/order/contact */
 export async function contactOrderUsingPost(
   body: API.OrderContactRequest,
@@ -103,6 +118,36 @@ export async function changeRoomUsingPost(
       'Content-Type': 'application/json',
     },
     data: body,
+    ...(options || {}),
+  })
+}
+
+/** searchOrder POST /api/order/search */
+export async function searchOrderUsingPost(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.searchOrderUsingPOSTParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseListOrder_>('/api/order/search', {
+    method: 'POST',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
+/** findOrderRemindState GET /api/order/state/remind */
+export async function findOrderRemindStateUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.findOrderRemindStateUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/order/state/remind', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
     ...(options || {}),
   })
 }

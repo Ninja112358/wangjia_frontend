@@ -47,7 +47,9 @@
       </div>
       <!--在住:在住脏和在住净,包括联房和团队-->
       <div class="room" v-if="room.roomState === 1 || room.roomState === 4" :style="room.roomState === 1 ? {'background': '#4e6ef2'} : {'background': '#203f74'}">
-        <span style="font-weight: normal;font-size: 14px">{{room.roomId}} {{room.roomType}} <span v-if="room.roomState === 4">(需打扫)</span></span>
+        <span style="font-weight: normal;font-size: 14px"><span class="room-remind-circle" v-if="showRemindState"></span>{{room.roomId}} {{room.roomType}}
+          <span v-if="room.roomState === 4">(需打扫)</span>
+        </span>
         <div class="room-state-image">
           <img v-if="room.isTeam" src="@/assets/images/team.png" width="50px" alt="clean"/>
           <img v-else-if="room.isContact" src="@/assets/images/contactRoom.png" width="50px" alt="clean"/>
@@ -78,18 +80,19 @@
 
 <script setup lang="ts">
 import { message, Modal } from 'ant-design-vue'
-import { createVNode, ref } from 'vue'
+import { createVNode, onBeforeUpdate, onMounted, onUpdated, ref } from 'vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { setRoomStateUsingPost } from '@/service/api/roomController.ts'
 import CheckInModal from '@/components/modal/room/CheckInModal.vue'
 import SelectRoomModal from '@/components/modal/room/SelectRoomModal.vue'
 import ContactRoomModal from '@/components/modal/room/ContactRoomModal.vue'
+import { findOrderRemindStateUsingGet } from '@/service/api/orderController.ts'
 
 const checkInModalOpen = ref<boolean>(false);
 const selectRoomModalOpen = ref<boolean>(false);
 const contactRoomModalOpen = ref<boolean>(false);
 
-defineProps<{
+const props = defineProps<{
   room: API.Room
 }>();
 
@@ -166,6 +169,21 @@ const findOrderInfoById = (id: number | undefined) => {
   }
   return "无"
 }
+const showRemindState = ref(false);
+onMounted(async () => {
+  await findOrderRemindState(props.room.orderId??0);
+})
+onUpdated(async () => {
+  await findOrderRemindState(props.room.orderId??0);
+})
+const findOrderRemindState = async (orderId: number) => {
+  const res = await findOrderRemindStateUsingGet({ orderId });
+  if(res.data.code === 0 && res.data.data)
+    showRemindState.value = res.data.data
+  else
+    showRemindState.value = false
+
+}
 
 
 </script>
@@ -194,5 +212,13 @@ const findOrderInfoById = (id: number | undefined) => {
   flex-direction: column;
   width: 176px;
   height: 80px;
+}
+#roomCard .room-remind-circle{
+  display:inline-block;
+  width: 10px;
+  height: 10px;
+  background: red;
+  border-radius: 50%;
+  margin-right: 5px;
 }
 </style>

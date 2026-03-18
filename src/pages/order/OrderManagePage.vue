@@ -164,6 +164,11 @@
               >
                 结账
               </a-button>
+              <a-button
+                v-if="record.orderState === 1" type="dashed" @click="doCheckOutCancel(record.id)"
+              >
+                撤销
+              </a-button>
             </span>
 
           </div>
@@ -176,6 +181,7 @@
 <script lang="ts" setup>
 import { computed, createVNode, onMounted, reactive, ref } from 'vue'
 import {
+  checkoutCancelUsingPost,
   checkoutUsingPost,
   listOrderByPageUsingPost, updateOrderUsingPost,
 } from '@/service/api/orderController.ts'
@@ -382,6 +388,16 @@ const doTableChange = (page: any) => {
 const doSearch = () => {
   searchParams.current = 1;
   fetchData();
+}
+const doCheckOutCancel = async (orderId: number) => {
+  const res = await checkoutCancelUsingPost({orderId});
+  if(res.data.code === 0 && res.data.data){
+    await fetchData();
+    message.success("撤销退房成功");
+  }else{
+    message.error("撤销退房失败:" + res.data.message);
+  }
+  console.log("test")
 }
 
 // 编辑功能

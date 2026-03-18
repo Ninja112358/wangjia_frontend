@@ -3,7 +3,22 @@
     <a-modal v-model:open="checkInModalOpen" title="入住信息登记" @ok="checkInOk" :zIndex="1050" width="70%" style="top: 40px" destroyOnClose>
       <a-form layout="inline" :model="checkInParams" @finish="doCheckIn">
         <a-form-item class="form-item">
-          <a-input v-model:value="checkInParams.name" placeholder="请输入姓名" addon-before="姓名" size="large" allow-clear/>
+          <a-input-group compact>
+            <div class="input-addon">
+              姓名
+            </div>
+            <a-auto-complete
+              v-model:value="checkInParams.name"
+              :options="searchOptions"
+              style="width: 200px"
+              placeholder="请输入姓名"
+              @select="onNameSelect"
+              @search="onNameSearch"
+              size="large"
+              allow-clear
+            />
+          </a-input-group>
+<!--          <a-input v-model:value="checkInParams.name" placeholder="请输入姓名" addon-before="姓名" size="large" allow-clear/>-->
         </a-form-item>
         <a-form-item class="form-item">
           <a-input v-model:value="checkInParams.phone" placeholder="请输入电话" addon-before="电话"  size="large" allow-clear/>
@@ -26,10 +41,15 @@
           <a-input v-model:value="checkInParams.orderInfo" placeholder="请输入订单备注" addon-before="订单备注"  size="large" allow-clear/>
         </a-form-item>
         <a-form-item class="form-item">
-          <a-select v-model:value="checkInParams.customType" placeholder="请选择顾客类型" size="large" style="padding-left: 0;width:150px" >
-            <a-select-option :value="0">散客</a-select-option>
-            <a-select-option :value="1">团队</a-select-option>
-          </a-select>
+          <a-input-group compact>
+            <div class="input-addon">
+              顾客类型
+            </div>
+            <a-select v-model:value="checkInParams.customType" placeholder="请选择顾客类型" size="large" style="padding-left: 0;width:150px" >
+              <a-select-option :value="0">散客</a-select-option>
+              <a-select-option :value="1">团队</a-select-option>
+            </a-select>
+          </a-input-group>
         </a-form-item>
         <a-form-item class="form-item" v-if="checkInParams.customType === 1">
           <a-select v-model:value="teamType" placeholder="请选择顾客类型" size="large" style="padding-left: 0;width:150px" >
@@ -79,7 +99,7 @@
 
 <script setup lang="ts">
 import { createVNode, h, onMounted, reactive, ref, type UnwrapRef, watch } from 'vue'
-import { checkInUsingPost } from '@/service/api/orderController.ts'
+import { checkInUsingPost, searchOrderUsingPost } from '@/service/api/orderController.ts'
 import { Input, message, Modal } from 'ant-design-vue'
 import { useRoomListStore } from '@/stores/useRoomListStore.ts'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
@@ -188,7 +208,7 @@ const columns = [
     width: '200px',
   }
 ];
-
+const searchOptions = ref([]);
 
 // 编辑功能
 const editableData: UnwrapRef<Record<string, API.RoomType[]>> = reactive({});
@@ -209,7 +229,36 @@ const doDelete = async (id: number) => {
   }
   roomList.value = roomList.value.filter(item => item.id !== id);
 }
+const onNameSelect = (value: API.Order) => {
+  //这里选中的是orderId所以根据orderId去查就好了
+  console.log(value);
+  checkInParams.value.name = value.name;
+  checkInParams.value.phone = value.phone;
+  checkInParams.value.cardType = value.cardType;
+  checkInParams.value.idCard = value.idCard;
+  checkInParams.value.orderInfo = value.orderInfo;
+  checkInParams.value.customType = value.customType;
+};
+const onNameSearch = async (searchText: string) => {
+  //这里要在服务端发请求获取所有符合条件的order
+  const searchOrderList = await searchOrderByText(searchText);
+  //更新列表
+  searchOptions.value = searchOrderList?.map(item => {
+    return {
+      label: `${item.name}(${item.phone})`,
+      value: item
+    }
+  })??[];
+};
+const searchOrderByText = async (input: string) => {
+  const res = await searchOrderUsingPost({input});
+  if(res.data.code === 0 && res.data.data)
+    return res.data.data;
+  else{
+    message.error(res.data.message);
+  }
 
+}
 
 const checkInParams = ref<API.OrderCheckInRequest>({
   cardType: '身份证',
@@ -276,6 +325,14 @@ const doCheckIn = async () => {
 }
 .editable-row-operations button{
   margin-right: 8px;
+}
+.input-addon{
+  height:40px;
+  line-height:40px;
+  background: rgba(0, 0, 0, 0.02);
+  padding: 0 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px 0 0 8px;
 }
 .form-item{
   font-size: 14px;

@@ -29,6 +29,21 @@ export async function deleteShopUsingPost(
   })
 }
 
+/** increaseShopNum GET /api/shop/increase/shopNum */
+export async function increaseShopNumUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.increaseShopNumUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/shop/increase/shopNum', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
 /** listShop POST /api/shop/list */
 export async function listShopUsingPost(options?: { [key: string]: any }) {
   return request<API.BaseResponseListShop_>('/api/shop/list', {

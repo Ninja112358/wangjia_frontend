@@ -67,7 +67,7 @@ const router = createRouter({
       path: '/shop/shopManage',
       name: '商品管理',
       meta:{
-        access: ACCESS_ENUM.ADMIN,
+        access: ACCESS_ENUM.USER,
         pageType: 'menu'
       },
       component: () => import('../pages/shop/ShopManagePage.vue'),

@@ -1,7 +1,7 @@
 <template>
   <div id="shopManagePage">
     <!-- 表单 (添加 + 简单搜索) -->
-    <a-form layout="inline" :model="addParams" @finish="doInsert" style="margin-bottom: 16px">
+    <a-form layout="inline" :model="addParams" @finish="doInsert" style="margin-bottom: 16px" v-if="loginUserStore.loginUser.userRole === 'admin'">
       <a-form-item label="商品名称">
         <a-input v-model:value="addParams.name" placeholder="请输入商品名称" />
       </a-form-item>
@@ -40,7 +40,7 @@
     </a-form>
 
     <!-- 表格 -->
-    <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange" :scroll="{ y: 630 }">
+    <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange" :scroll="{ y: 580 }">
       <template #bodyCell="{ column, text , record }">
 
         <!-- 可编辑字段：名称、价格、类型、库存、备注 -->
@@ -82,8 +82,9 @@
               <a-button type="primary" @click="doEditSave(record.id)">保存</a-button>
             </span>
             <span v-else>
-              <a-button type="primary" @click="doEdit(record.id)">编辑</a-button>
-              <a-button type="primary" danger @click="doDelete(record.id)">删除</a-button>
+              <a-button @click="doCountShop(record.id)">入库</a-button>
+              <a-button type="primary" @click="doEdit(record.id)" v-if="loginUserStore.loginUser.userRole === 'admin'">编辑</a-button>
+              <a-button type="primary" danger @click="doDelete(record.id)" v-if="loginUserStore.loginUser.userRole === 'admin'">删除</a-button>
             </span>
 
           </div>
@@ -94,17 +95,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, createVNode, onMounted, reactive, ref, type UnwrapRef } from 'vue'
+import { computed, createVNode, h, onMounted, reactive, ref, type UnwrapRef } from 'vue'
 // 请确保路径正确，对应你的 shopController.ts
 import {
   addShopUsingPost,
-  deleteShopUsingPost,
+  deleteShopUsingPost, increaseShopNumUsingGet,
   listShopByPageUsingPost,
   updateShopUsingPost
 } from '@/service/api/shopController.ts'
-import { message, Modal } from 'ant-design-vue'
+import { Input, message, Modal } from 'ant-design-vue'
 import dayjs from 'dayjs'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
+import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 
 // 定义数据
 const addParams = ref<API.ShopAddRequest>({});
@@ -115,7 +117,7 @@ const searchParams = reactive<API.ShopQueryRequest>({
   sortOrder: 'descend'
 });
 const total = ref(0);
-
+const loginUserStore = useLoginUserStore();
 const dataList = ref<API.Shop[]>([]);
 
 // 分页参数
@@ -189,7 +191,7 @@ const columns = [
     title: '操作',
     dataIndex: 'action',
     align: 'center',
-    width: '200px',
+    width: '260px',
   }
 ]
 
@@ -207,8 +209,9 @@ const fetchData = async () => {
 }
 
 // 页面加载时获取数据，请求一次
-onMounted(() => {
-  fetchData();
+onMounted(async () => {
+  await fetchData();
+  await loginUserStore.fetchLoginUser();
 })
 
 // 添加
@@ -292,6 +295,40 @@ const doDelete = async (id: string) => {
       }
     }
   })
+}
+
+const doCountShop = (shopId: number) => {
+  const increaseShopNumParams = ref<{shopId:number,num:number}>({
+    shopId,
+    num:0
+  })
+  Modal.confirm({
+    title: '商品入库',
+    icon: null,
+    content: h('div', {}, [
+      h(Input, {
+        defaultValue: increaseShopNumParams.value.num,
+        'onUpdate:value': (val) => {
+          increaseShopNumParams.value.num = Number(val);
+        },
+        placeholder: '请输入库数量',
+        style: { width: '100%', margin: '10px 0' },
+        addonBefore: '入库数量',
+        type: 'number',
+        size: 'large'
+      })
+    ]),
+    zIndex: 1100,
+    async onOk() {
+      const res = await increaseShopNumUsingGet(increaseShopNumParams.value);
+      if (res.data.code === 0 && res.data.data) {
+        message.success("入库成功");
+        await fetchData();
+      } else {
+        message.error("入库失败:" + res.data.message);
+      }
+    }
+  });
 }
 
 // 金额格式化

@@ -113,6 +113,11 @@ declare namespace API {
     message?: string
   }
 
+  type checkoutCancelUsingPOSTParams = {
+    /** orderId */
+    orderId?: number
+  }
+
   type checkoutUsingPOSTParams = {
     /** orderId */
     orderId?: number
@@ -150,6 +155,11 @@ declare namespace API {
     filepath?: string
   }
 
+  type findOrderRemindStateUsingGETParams = {
+    /** orderId */
+    orderId?: number
+  }
+
   type getJobDetailUsingGETParams = {
     /** groupName */
     groupName?: string
@@ -165,6 +175,13 @@ declare namespace API {
   type getUserVOByIdUsingGETParams = {
     /** id */
     id?: number
+  }
+
+  type increaseShopNumUsingGETParams = {
+    /** num */
+    num?: number
+    /** shopId */
+    shopId?: number
   }
 
   type listGroupMoneyInfoByOrderIdUsingPOSTParams = {
@@ -505,6 +522,11 @@ declare namespace API {
     roomPeopleNum?: number
     roomPrice?: number
     roomType?: string
+  }
+
+  type searchOrderUsingPOSTParams = {
+    /** input */
+    input?: string
   }
 
   type Shop = {

@@ -10,6 +10,12 @@
         <div style="font-size: 28px; font-weight: bold; margin-bottom: 16px;">
           <a-checkbox class="checkbox" v-for="item in roomListStore.roomTypeChecked" :key="item.name" v-model:checked="item.checked" @change="doCheckedChange">{{item.name}}</a-checkbox>
         </div>
+        <div class="button-group">
+          <a-button type="primary" class="button" @click="doRoomClearAll">置净所有空脏</a-button>
+          <a-button type="primary" class="button" @click="doRoomInsideClearAll">置净所有在住脏</a-button>
+          <a-button danger type="primary" class="button" @click="doRoomDirtyAll">置脏所有空房</a-button>
+          <a-button danger type="primary" class="button" @click="doRoomInsideDirtyAll">置脏所有在住</a-button>
+        </div>
       </a-layout-sider>
       <a-layout>
         <!--主页面-->
@@ -38,6 +44,8 @@ import RoomCard from '@/components/RoomCard.vue'
 import { useRoomListStore } from '@/stores/useRoomListStore.ts'
 import RoomFooter from '@/components/RoomFooter.vue'
 import { useRoomTypeListStore } from '@/stores/useRoomTypeListStore.ts'
+import { setRoomStateUsingPost } from '@/service/api/roomController.ts'
+import { message } from 'ant-design-vue'
 
 //将pinia的数据导入
 const roomListStore = useRoomListStore();
@@ -69,6 +77,50 @@ onMounted(async () => {
 const doCheckedChange = () => {
   fetchData();
 }
+const doRoomClearAll = () => {
+  roomListStore.rooms.forEach(async (items,index) => {
+    if(items !== undefined)
+      for (let item of items)
+        if(item.roomState === 3)
+          await setRoomState(item,0);
+  });
+}
+const doRoomInsideClearAll = () => {
+  roomListStore.rooms.forEach(async (items,index) => {
+    if(items !== undefined)
+      for (let item of items)
+        if(item.roomState === 4)
+          await setRoomState(item,1);
+  });
+}
+const doRoomDirtyAll = () => {
+  roomListStore.rooms.forEach(async (items,index) => {
+    if(items !== undefined)
+      for (let item of items)
+        if(item.roomState === 0)
+          await setRoomState(item,3);
+  });
+}
+const doRoomInsideDirtyAll = () => {
+  roomListStore.rooms.forEach(async (items,index) => {
+    if(items !== undefined)
+      for (let item of items)
+        if(item.roomState === 1)
+          await setRoomState(item,4);
+  });
+}
+
+//设置房间状态
+const setRoomState = async (room: API.Room,roomState: number) => {
+  let id = room.id;
+  const res = await setRoomStateUsingPost({id,roomState});
+  if(res.data.code === 0){
+    message.success("设置房间状态成功");
+    room.roomState = roomState;
+  }else
+    message.error("设置房间状态失败:" + res.data.message)
+}
+
 
 
 </script>
@@ -121,5 +173,9 @@ const doCheckedChange = () => {
 #home-page .room-panel{
   font-weight: bolder;
   font-size: 18px;
+}
+#home-page .button-group .button{
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 </style>

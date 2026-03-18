@@ -96,12 +96,7 @@ const roomListStore = useRoomListStore();
 //订单和订单组顶部的展示信息
 const orderGroupInfo = computed(() => {
   return {
-    totalRest: orderList.value.reduce((acc, cur) => {
-      if(cur.orderState == 0)
-        return acc + (cur.restMoney??0);
-      else
-        return acc;
-    }, 0),
+    totalRest: orderList.value.reduce((acc, cur) => acc + (cur.restMoney??0), 0),
     pay: orderList.value.reduce((acc, cur) => acc + (cur.pay??0), 0),
     consume: orderList.value.reduce((acc, cur) => acc + (cur.consume??0), 0),
     roomPrice: orderList.value.reduce((acc, cur) => acc + (cur.roomPrice??0), 0),
@@ -808,7 +803,8 @@ const deduct = async (params: API.MoneyInfoFeeRequest) => {
     await fetchMoneyInfo(selectedKey.value);
     selectedKey.value = null;
     await fetchData();
-    await nextTick();
+    await nextTick()
+    await roomListStore.fetchRoomList();
     selectedKey.value = params.orderId;
     return true;
   }else{
@@ -824,6 +820,7 @@ const pay = async (params: API.MoneyInfoFeeRequest) => {
     selectedKey.value = null;
     await fetchData();
     await nextTick();
+    await roomListStore.fetchRoomList();
     selectedKey.value = params.orderId;
     return true;
   }else{
