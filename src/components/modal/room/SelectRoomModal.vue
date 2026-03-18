@@ -709,7 +709,7 @@ const doCheckOut = () => {
       if(orderId === '0'){
         //这里要把所有订单组的订单全部退房
         for (let i = 0; i < orderList.value.length; i++){
-          if(orderList.value[i].id && String(orderList.value[i].id) !== '0'){
+          if(orderList.value[i].id && String(orderList.value[i].id) !== '0' && orderList.value[i].orderState === 0){
             console.log(orderList.value[i]);
             const res = await checkoutUsingPost({ orderId: orderList.value[i].id });
             if(res.data.code === 0){
