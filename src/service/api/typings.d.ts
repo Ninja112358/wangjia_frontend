@@ -113,6 +113,11 @@ declare namespace API {
     message?: string
   }
 
+  type checkFingerPrintUsingGETParams = {
+    /** fingerPrint */
+    fingerPrint?: string
+  }
+
   type checkoutCancelUsingPOSTParams = {
     /** orderId */
     orderId?: number
@@ -527,6 +532,11 @@ declare namespace API {
   type searchOrderUsingPOSTParams = {
     /** input */
     input?: string
+  }
+
+  type setFingerPrintUsingGETParams = {
+    /** fingerPrint */
+    fingerPrint?: string
   }
 
   type Shop = {

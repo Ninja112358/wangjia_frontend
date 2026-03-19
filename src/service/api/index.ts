@@ -5,6 +5,7 @@
 import * as mainController from './mainController'
 import * as jobController from './jobController'
 import * as fileController from './fileController'
+import * as fingerPrintController from './fingerPrintController'
 import * as moneyInfoController from './moneyInfoController'
 import * as orderController from './orderController'
 import * as orderGroupController from './orderGroupController'
@@ -16,6 +17,7 @@ export default {
   mainController,
   jobController,
   fileController,
+  fingerPrintController,
   moneyInfoController,
   orderController,
   orderGroupController,

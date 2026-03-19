@@ -50,6 +50,8 @@ import { userLoginUsingPost, userRegisterUsingPost } from '@/service/api/userCon
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { message } from 'ant-design-vue'
 import router from '@/router'
+import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import { checkFingerPrintUsingGet } from '@/service/api/fingerPrintController.ts'
 
 // 用于接收表单输入的值
 const formState = reactive<API.UserRegisterRequest>({
@@ -59,11 +61,31 @@ const formState = reactive<API.UserRegisterRequest>({
 });
 const loginUserStore = useLoginUserStore();
 
+
+async function getProFingerprint() {
+  const fp = await FingerprintJS.load()
+  const result = await fp.get()
+  return result.visitorId // 这是一个经过稳定性处理的 ID
+}
+const checkFingerPrint = async () => {
+  const fingerPrint = await getProFingerprint();
+  const res = await checkFingerPrintUsingGet({ fingerPrint });
+  if(res.data.code === 0 && res.data.data){
+    return true;
+  }else{
+    message.error(res.data.message);
+    return false;
+  }
+}
+
 /**
  * 提交表单
  * @param values
  */
 const handleSubmit = async (values: any) => {
+  if(!await checkFingerPrint()){
+    return;
+  }
   // 校验两次密码输入是否一致
   if(values.userPassword !== values.checkPassword){
     message.error("两次密码输入不一致");
