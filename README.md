@@ -1,17 +1,18 @@
 # 酒店前端管理系统
 
-基于 Vue 3 + TypeScript + Vite 构建的酒店管理系统前端应用。
+基于 Vue3 + TypeScript + Vite 构建的酒店管理系统前端应用。
 
 ## 技术栈
 
-- **框架**: Vue 3.5.13
-- **语言**: TypeScript 5.8.0
-- **构建工具**: Vite 6.2.1
-- **状态管理**: Pinia 3.0.1
-- **路由**: Vue Router 4.5.0
+- **框架**: Vue3
+- **前端工程化**: Eslint + Prettier + TypeScript
+- **构建工具**: Vite
+- **状态管理**: Pinia
+- **路由**: Vue Router
 - **UI 组件库**: Ant Design Vue 4.2.6
-- **HTTP 请求**: Axios 1.8.4
+- **HTTP 请求**: Axios
 - **设备指纹**: @fingerprintjs/fingerprintjs 5.1.0
+- **接口文档生成**: @umijs/openapi 1.4.1
 
 ## 功能模块
 
@@ -155,7 +156,7 @@ import Component from '@/components/Component.vue'
 
 ### 1. OpenAPI 生成失败
 
-确保后端服务已启动且可访问 `http://localhost:5173`。
+确保后端服务已启动且可访问 `http://localhost:8110/api/v2/api-docs?group=default`。
 
 ### 2. 类型检查错误
 

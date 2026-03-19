@@ -5,7 +5,7 @@ const DEV_BASE_URL = 'http://localhost:8110/'
 const PROD_BASE_URL = 'http://123.57.57.248/'
 
 const myAxios = axios.create({
-  baseURL: PROD_BASE_URL,
+  baseURL: DEV_BASE_URL,
   timeout: 60000,
   withCredentials: true,
 });
