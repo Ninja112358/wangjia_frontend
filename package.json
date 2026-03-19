@@ -15,6 +15,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^5.1.0",
     "ant-design-vue": "^4.2.6",
     "axios": "^1.8.4",
     "pinia": "^3.0.1",

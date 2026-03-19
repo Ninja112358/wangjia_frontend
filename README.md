@@ -1,39 +1,170 @@
-# picture_cloud_frontend
+# 酒店前端管理系统
 
-This template should help get you started developing with Vue 3 in Vite.
+基于 Vue 3 + TypeScript + Vite 构建的酒店管理系统前端应用。
 
-## Recommended IDE Setup
+## 技术栈
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **框架**: Vue 3.5.13
+- **语言**: TypeScript 5.8.0
+- **构建工具**: Vite 6.2.1
+- **状态管理**: Pinia 3.0.1
+- **路由**: Vue Router 4.5.0
+- **UI 组件库**: Ant Design Vue 4.2.6
+- **HTTP 请求**: Axios 1.8.4
+- **设备指纹**: @fingerprintjs/fingerprintjs 5.1.0
 
-## Type Support for `.vue` Imports in TS
+## 功能模块
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- 首页管理
+- 订单管理
+- 客房管理
+- 用户管理
+- 商品管理
+- 员工管理
+- 财务报表
+- 指纹识别
+- 后台管理
 
-## Customize configuration
+## 开发指南
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### 环境要求
 
-## Project Setup
+- Node.js 22+
+- npm 或 yarn
 
-```sh
+### 安装依赖
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 启动开发服务器
 
-```sh
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+访问 `http://localhost:5173` 查看应用。
 
-```sh
+### 构建生产版本
+
+```bash
+# 类型检查并构建
 npm run build
+
+# 仅构建（不进行类型检查）
+npm run pure-build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### 预览生产构建
 
-```sh
+```bash
+npm run preview
+```
+
+### 代码生成
+
+从后端 Swagger 文档生成 API 服务代码：
+
+```bash
+npm run openapi
+```
+
+> 注意：需要后端服务运行在 `http://localhost:8110`
+
+### 代码质量
+
+```bash
+# ESLint 检查并自动修复
 npm run lint
+
+# Prettier 格式化代码
+npm run format
 ```
+
+## 项目结构
+
+```
+wangjia_frontend/
+├── src/
+│   ├── access/           # 权限控制
+│   ├── assets/           # 静态资源
+│   ├── components/       # 公共组件
+│   ├── layouts/          # 布局组件
+│   ├── pages/            # 页面组件
+│   │   ├── admin/        # 后台管理页面
+│   │   ├── error/        # 错误页面
+│   │   ├── fingerprint/  # 指纹相关页面
+│   │   ├── job/          # 员工管理页面
+│   │   ├── money_info/   # 财务报表页面
+│   │   ├── order/        # 订单管理页面
+│   │   ├── room/         # 客房管理页面
+│   │   ├── shop/         # 商品管理页面
+│   │   └── user/         # 用户管理页面
+│   ├── router/           # 路由配置
+│   ├── service/          # API 服务
+│   ├── stores/           # 状态管理
+│   ├── App.vue           # 根组件
+│   ├── main.ts           # 入口文件
+│   └── request.ts        # HTTP 请求封装
+├── public/               # 公共静态资源
+├── dist/                 # 构建输出目录
+├── index.html            # HTML 模板
+├── package.json          # 项目配置文件
+├── tsconfig.json         # TypeScript 配置
+├── vite.config.ts        # Vite 配置
+└── openapi.config.js     # OpenAPI 生成配置
+```
+
+## 配置说明
+
+### 路径别名
+
+项目配置了 `@` 别名指向 `src` 目录：
+
+```typescript
+import Component from '@/components/Component.vue'
+```
+
+### API 生成
+
+使用 `@umijs/openapi` 自动生成 API 服务代码，配置位于 `openapi.config.js`：
+
+- **schemaPath**: 后端 Swagger 文档地址
+- **output**: 生成代码输出目录
+- **requestLibPath**: 使用的请求库路径
+
+## 开发规范
+
+- 遵循 ESLint 规则
+- 使用 Prettier 统一代码格式
+- TypeScript 严格模式
+- 组件命名采用 PascalCase
+- 文件命名采用 camelCase
+
+## 浏览器支持
+
+推荐使用现代浏览器：
+
+- Chrome (最新版)
+- Firefox (最新版)
+- Edge (最新版)
+- Safari (最新版)
+
+## 常见问题
+
+### 1. OpenAPI 生成失败
+
+确保后端服务已启动且可访问 `http://localhost:5173`。
+
+### 2. 类型检查错误
+
+运行 `npm run type-check` 查看详细类型错误信息。
+
+### 3. 样式冲突
+
+Ant Design Vue 样式已通过 `reset.css` 重置，如遇到样式问题请检查 CSS 优先级。
+
+## 许可证
+
+私有项目，未经许可不得用于商业用途。

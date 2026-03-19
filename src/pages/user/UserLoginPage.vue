@@ -41,6 +41,8 @@ import { userLoginUsingPost } from '@/service/api/userController.ts'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { message } from 'ant-design-vue'
 import router from '@/router'
+import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import { checkFingerPrintUsingGet } from '@/service/api/fingerPrintController.ts'
 
 // 用于接收表单输入的值
 const formState = reactive<API.UserLoginRequest>({
@@ -49,11 +51,30 @@ const formState = reactive<API.UserLoginRequest>({
 });
 const loginUserStore = useLoginUserStore();
 
+async function getProFingerprint() {
+  const fp = await FingerprintJS.load()
+  const result = await fp.get()
+  return result.visitorId // 这是一个经过稳定性处理的 ID
+}
+const checkFingerPrint = async () => {
+  const fingerPrint = await getProFingerprint();
+  const res = await checkFingerPrintUsingGet({ fingerPrint });
+  if(res.data.code === 0 && res.data.data){
+    return true;
+  }else{
+    message.error(res.data.message);
+    return false;
+  }
+}
+
 /**
  * 提交表单
  * @param values
  */
 const handleSubmit = async (values: any) => {
+  if(!await checkFingerPrint()){
+    return;
+  }
   const res = await userLoginUsingPost(values);
   //登录成功，把登录态保存到全局状态中
   if(res.data.code === 0 && res.data.data){
